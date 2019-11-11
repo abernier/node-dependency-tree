@@ -149,8 +149,6 @@ module.exports._getDependencies = function(config) {
   }
 
   return [resolvedDependencies, o2];
-
-  return resolvedDependencies;
 };
 
 /**
