@@ -191,7 +191,7 @@ function traverse(config) {
         subTree.add(item);
       }
     } else {
-      subTree[d] = traverse(localConfig);
+      subTree[`${d}:${metadata[d]}`] = traverse(localConfig);
     }
   }
 
