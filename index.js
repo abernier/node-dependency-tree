@@ -128,6 +128,27 @@ module.exports._getDependencies = function(config) {
 
     resolvedDependencies.push(result);
   }
+  
+  //
+  // metadata
+  //
+  let o = {};
+  precinct.ast.program.body.forEach(el => {
+    if (el.source) {
+      const start = el.source.loc.start;
+      const end = el.source.loc.end;
+
+      o[el.source.value] = `${start.line}.${start.column}-${end.line}.${end.column}`
+    }
+  });
+
+  let o2 = {};
+  for (let i = 0, l = dependencies.length; i < l; i++) {
+    const dep = dependencies[i];
+    o2[resolvedDependencies[i]] = o[dep];
+  }
+
+  return [resolvedDependencies, o2];
 
   return resolvedDependencies;
 };
@@ -146,7 +167,7 @@ function traverse(config) {
     return config.visited[config.filename];
   }
 
-  let dependencies = module.exports._getDependencies(config);
+  let [dependencies, metadata] = module.exports._getDependencies(config);
 
   debug('cabinet-resolved all dependencies: ', dependencies);
   // Prevents cycles by eagerly marking the current file as read
